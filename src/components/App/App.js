@@ -4,7 +4,7 @@ import {
   enrichSeriesWithDefaultOptions,
   getChartOptionsToBeAddedWithData,
 } from '../Chart/Chart.js';
-import { OfflineNotificator } from '../OfflineNotificator/OfflineNotificator.js';
+import { NetStatusNotificator } from '../NetStatusNotificator/NetStatusNotificator.js';
 import { Deal } from '../Deal/Deal.js';
 import { binanceService } from '../../services/binance.service.js';
 
@@ -99,7 +99,7 @@ class App extends React.Component {
           <div className="App-sidebar-right" />
         </div>
         <footer className="App-footer">© 2019 Reactive Crypto Bets. All rights reserved</footer>
-        <OfflineNotificator />
+        <NetStatusNotificator />
       </div>
     );
   }
