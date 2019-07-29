@@ -3,7 +3,10 @@ import React from 'react';
 import './OfflineNotificator.css';
 
 class OfflineNotificator extends React.Component {
-  props = {};
+  props = {
+    onlineText: 'Online',
+    offlineText: 'Offline',
+  };
 
   state = {};
 

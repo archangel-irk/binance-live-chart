@@ -1,34 +1,43 @@
+import { EventEmitter } from '../utils/EventEmitter.js';
+
+
 // class OfflineDetector {}
 
-class OfflineDetectionService {
+const BrowserEvents = {
+  ONLINE: 'online',
+  OFFLINE: 'offline',
+};
+
+const OfflineDetectionEvents = {
+  ONLINE: 'online',
+  OFFLINE: 'offline',
+};
+
+class OfflineDetectionService extends EventEmitter {
   online = false;
-  element = document.createElement('div');
 
   constructor() {
+    super();
     this.checkOnline();
-    window.addEventListener('online',  this.setOnlineStatus);
-    window.addEventListener('offline', this.setOfflineStatus);
+    window.addEventListener(BrowserEvents.ONLINE,  this.handleOnlineStatus);
+    window.addEventListener(BrowserEvents.OFFLINE, this.handleOfflineStatus);
   }
 
   checkOnline() {
     this.online = navigator.onLine;
   }
 
-  setOnlineStatus() {
-    document.getElementById('status').innerText = 'Online';
+  handleOnlineStatus() {
+    this.trigger(OfflineDetectionEvents.ONLINE);
   }
 
-  setOfflineStatus() {
-    document.getElementById('status').innerText = 'Offline';
-  }
-
-  update() {
-
-  }
-
-  render() {
-    document.body.append(this.element);
+  handleOfflineStatus() {
+    this.trigger(OfflineDetectionEvents.OFFLINE);
   }
 }
 
-export const offlineDetectionService = new OfflineDetectionService();
+const offlineDetectionService = new OfflineDetectionService();
+export {
+  OfflineDetectionEvents,
+  offlineDetectionService,
+};
