@@ -4,7 +4,7 @@ import './NetStatusNotificator.css';
 import {
   NetStatusEvent,
   netStatusService,
-} from '../../services/NetStatusService.js';
+} from '../../services/netStatusService.js';
 
 class NetStatusNotificator extends React.Component {
   constructor(props) {
