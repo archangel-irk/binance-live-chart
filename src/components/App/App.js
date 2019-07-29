@@ -24,7 +24,7 @@ const pairTitleMap = {
 class App extends React.Component {
   currentSymbolPair = PAIR_DEFAULT;
   state = {
-    data: undefined,
+    initialData: undefined,
     showDeal: false,
   };
   chartRef = React.createRef();
@@ -54,7 +54,7 @@ class App extends React.Component {
         // this.chartRef.current.chart.addSeries({ data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9] });
         this.setState({
           showDeal: true,
-          data,
+          initialData: data,
         });
         this.connectToStream();
       })
@@ -112,7 +112,7 @@ class App extends React.Component {
           <div className="App-main">
             <CryptoChart
               title={pairTitleMap[this.currentSymbolPair]}
-              data={this.state.data}
+              initialData={this.state.initialData}
               ref={this.chartRef}
             />
             {showDeal &&

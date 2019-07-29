@@ -293,7 +293,7 @@ class CryptoChart extends React.Component {
       },
     });
 
-    if (this.props.data) {
+    if (this.props.initialData) {
       // options.series = [
       //   {
       //     ...seriesDefaultOptions,
@@ -307,7 +307,7 @@ class CryptoChart extends React.Component {
 
       options = mergeDeepRight(options, {
         series: [
-          enrichSeriesWithDefaultOptions({data: this.props.data}),
+          enrichSeriesWithDefaultOptions({data: this.props.initialData}),
           flagBuySeries,
           flagSaleSeries,
         ],
