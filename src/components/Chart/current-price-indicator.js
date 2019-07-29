@@ -19,9 +19,6 @@ import { crosshairLabelNumberFormatter } from './formatters.js';
 
 
 export function applyCurrentPriceIndicator(H) {
-  'use strict';
-  var merge = H.merge;
-
   H.wrap(H.Chart.prototype, 'init', function(proceed) {
 
     // Run the original proceed method
@@ -97,7 +94,7 @@ export function applyCurrentPriceIndicator(H) {
 
       lineFrom;
 
-    options = merge(true, defaultOptions, options);
+    options = H.merge(true, defaultOptions, options);
 
     // width = priceYAxis.opposite ? (marginRight ? marginRight : 40) : (marginLeft ? marginLeft : 40);
     // x = priceYAxis.opposite ? chartWidth - width : marginLeft;
