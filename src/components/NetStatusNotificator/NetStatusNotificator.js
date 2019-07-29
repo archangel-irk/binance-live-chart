@@ -7,11 +7,6 @@ import {
 } from '../../services/NetStatusService.js';
 
 class NetStatusNotificator extends React.Component {
-  props = {
-    onlineText: 'Online',
-    offlineText: 'Offline',
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -64,6 +59,11 @@ class NetStatusNotificator extends React.Component {
     );
   }
 }
+
+NetStatusNotificator.defaultProps = {
+  onlineText: 'Online',
+  offlineText: 'Offline',
+};
 
 export {
   NetStatusNotificator,

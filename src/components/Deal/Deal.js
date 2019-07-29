@@ -6,11 +6,6 @@ const VALUE_MIN = 1;
 const VALUE_DEFAULT = 1;
 
 class Deal extends React.Component {
-  props = {
-    onSale: () => {},
-    onBuy: () => {},
-  };
-
   state = {
     value: VALUE_DEFAULT,
   };
@@ -100,6 +95,11 @@ class Deal extends React.Component {
     );
   }
 }
+
+Deal.defaultProps = {
+  onSale: () => {},
+  onBuy: () => {},
+};
 
 export {
   Deal,
