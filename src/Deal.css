@@ -1,0 +1,505 @@
+/*html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
+    background: transparent;
+    border: 0;
+    font-size: 100%;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    vertical-align: baseline;
+}*/
+
+.amount-input {
+    vertical-align: middle;
+    position: relative;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
+}
+.amount-input .input-btn,
+.amount-input .input {
+    display: inline-block;
+    height: 40px;
+    line-height: 38px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    vertical-align: middle;
+    z-index: 2;
+}
+.amount-input .input-btn:hover,
+.amount-input .input:hover {
+    z-index: 3;
+}
+.amount-input .input {
+    margin-left: -1px;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -o-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1 1 100%;
+    -ms-flex: 1 1 100%;
+    flex: 1 1 100%;
+}
+.amount-input .input i {
+    position: absolute;
+    left: 55px;
+    font-style: normal;
+}
+.amount-input .input-btn {
+    border: 1px solid #414a60;
+    width: 40px;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -o-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1 0 40px;
+    -ms-flex: 1 0 40px;
+    flex: 1 0 40px;
+    text-align: center;
+    font-weight: 100;
+    font-size: 20px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    user-select: none;
+}
+.amount-input .input-btn:hover {
+    border-color: #555e74;
+    z-index: 3;
+}
+.amount-input .plus {
+    border-radius: 0 3px 3px 0;
+    margin-left: -1px;
+    line-height: 36px;
+}
+.amount-input .minus {
+    border-radius: 3px 0 0 3px;
+    line-height: 36px;
+}
+.amount-input .plus,
+.amount-input .minus {
+    -webkit-transition: 0.3s background-color;
+    -moz-transition: 0.3s background-color;
+    -o-transition: 0.3s background-color;
+    -ms-transition: 0.3s background-color;
+    transition: 0.3s background-color;
+}
+.amount-input .plus:hover,
+.amount-input .minus:hover {
+    background-color: #2f3a52;
+}
+.amount-input input {
+    background: none;
+    vertical-align: top;
+    display: inline-block;
+    color: #fff;
+    font-size: 1em;
+    height: 40px;
+    line-height: 40px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 14px 2px 28px;
+    border-radius: 0;
+    width: 100%;
+    outline: none;
+    border: 1px solid #414a60;
+    position: relative;
+    z-index: 1;
+}
+.amount-input input:hover {
+    border-color: #555e74;
+    z-index: 2;
+}
+.amount-input input:focus {
+    border-color: #3099f5;
+    z-index: 4;
+}
+
+.deal-controller {
+    direction: ltr;
+    position: absolute;
+    bottom: 75px;
+    left: 50%;
+    margin-left: -262.5px;
+    width: 400px;
+    height: 80px;
+    border-radius: 5px;
+    background-color: rgba(28,35,51,0.6);
+    z-index: 10;
+    padding: 0 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: 0.2s width, 0.2s margin;
+    -moz-transition: 0.2s width, 0.2s margin;
+    -o-transition: 0.2s width, 0.2s margin;
+    -ms-transition: 0.2s width, 0.2s margin;
+    transition: 0.2s width, 0.2s margin;
+}
+.deal-controller .trader-choice-tooltip {
+    position: absolute;
+    display: block;
+    top: -5px;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-100%);
+    -moz-transform: translateX(-50%) translateY(-100%);
+    -o-transform: translateX(-50%) translateY(-100%);
+    -ms-transform: translateX(-50%) translateY(-100%);
+    transform: translateX(-50%) translateY(-100%);
+}
+.deal-controller .current-deal .currency-double i {
+    left: 49px;
+}
+.deal-controller .current-deal .currency-double input {
+    padding: 0 10px 2px 30px;
+}
+.deal-controller .current-deal,
+.deal-controller .new-deal {
+    position: relative;
+    height: 90px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-top: 10px;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
+    -o-box-pack: justify;
+    -ms-flex-pack: justify;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    width: calc(100% + 10px);
+}
+.deal-controller .holder {
+    position: relative;
+    overflow: hidden;
+    height: 90px;
+}
+.deal-controller .holder .slider {
+    height: 140px;
+    -webkit-transition: 0.2s;
+    -moz-transition: 0.2s;
+    -o-transition: 0.2s;
+    -ms-transition: 0.2s;
+    transition: 0.2s;
+}
+.deal-controller .holder .slider.upper {
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -o-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+}
+.deal-controller .holder .slider.down {
+    -webkit-transform: translateY(-90px);
+    -moz-transform: translateY(-90px);
+    -o-transform: translateY(-90px);
+    -ms-transform: translateY(-90px);
+    transform: translateY(-90px);
+}
+.deal-controller .block {
+    display: block;
+    height: 70px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-right: 10px;
+}
+.deal-controller .block.amount {
+    width: 170px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.deal-controller .block:first-of-type {
+    margin-left: 0;
+}
+.deal-controller .block .title {
+    font-size: 11px;
+    margin-bottom: 4px;
+    color: #8f9ab2;
+    font-weight: 600;
+}
+.deal-controller .block.deal {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
+    padding-right: 0;
+    -webkit-box-flex: 2;
+    -moz-box-flex: 2;
+    -o-box-flex: 2;
+    box-flex: 2;
+    -webkit-flex: 2 0 33%;
+    -ms-flex: 2 0 33%;
+    flex: 2 0 33%;
+}
+.deal-controller .block.deal > div {
+    width: 50%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.deal-controller .block.deal > div .amount-data {
+    font-size: 11px;
+    margin-bottom: 4px;
+    color: #8f9ab2;
+}
+.deal-controller .block.deal > div .amount-data .money-tiny {
+    font-size: 9px;
+    margin-bottom: 3px;
+}
+.deal-controller .block.deal > div.put-side {
+    padding-right: 4pt;
+}
+.deal-controller .block.deal > div.call-side {
+    padding-left: 4pt;
+}
+.deal-controller .block.deal > div .deal-button {
+    cursor: pointer;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 4px;
+    text-align: center;
+    -webkit-transition: -webkit-transform 0.2s;
+    -moz-transition: -moz-transform 0.2s;
+    -o-transition: -o-transform 0.2s;
+    -ms-transition: -ms-transform 0.2s;
+    transition: transform 0.2s;
+    position: relative;
+    font-weight: 700;
+    font-size: 13px;
+    color: rgba(0,0,0,0.3);
+    position: relative;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    user-select: none;
+}
+.deal-controller .block.deal > div .deal-button:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    content: '';
+    display: block;
+    border-radius: 4px;
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+    -webkit-transition: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    transition: opacity 0.2s;
+}
+.deal-controller .block.deal > div .deal-button:hover:after {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+}
+/*.deal-controller .block.deal > div .deal-button:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 16px;
+    height: 11px;
+    background-repeat: no-repeat;
+    -webkit-background-size: 100%;
+    -moz-background-size: 100%;
+    background-size: 100%;
+    left: 8pt;
+    top: 50%;
+    margin-top: -5px;
+}*/
+.deal-controller .block.deal > div .deal-button:active {
+    -webkit-transform: translateY(1px);
+    -moz-transform: translateY(1px);
+    -o-transform: translateY(1px);
+    -ms-transform: translateY(1px);
+    transform: translateY(1px);
+}
+.deal-controller .block.deal > div .deal-button.call {
+    background-image: -webkit-linear-gradient(270deg, #8cc44f 0%, #4ed462 100%);
+    background-image: -moz-linear-gradient(270deg, #8cc44f 0%, #4ed462 100%);
+    background-image: -o-linear-gradient(270deg, #8cc44f 0%, #4ed462 100%);
+    background-image: -ms-linear-gradient(270deg, #8cc44f 0%, #4ed462 100%);
+    background-image: linear-gradient(-180deg, #8cc44f 0%, #4ed462 100%);
+}
+.deal-controller .block.deal > div .deal-button.put {
+    background-image: -webkit-linear-gradient(270deg, #d4225d 0%, #d42260 100%);
+    background-image: -moz-linear-gradient(270deg, #d4225d 0%, #d42260 100%);
+    background-image: -o-linear-gradient(270deg, #d4225d 0%, #d42260 100%);
+    background-image: -ms-linear-gradient(270deg, #d4225d 0%, #d42260 100%);
+    background-image: linear-gradient(-180deg, #d4225d 0%, #d42260 100%);
+}
+.deal-controller .block.deal > div .deal-button.disabled {
+    opacity: 0.25;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=25)";
+    filter: alpha(opacity=25);
+    pointer-events: none;
+}
+.deal-controller .new {
+    border: 1px dashed #3099f5;
+    border-radius: 3px;
+    height: 60px;
+    line-height: 52px;
+    padding: 0 20px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 26px;
+    font-weight: 200;
+    color: #fff;
+    -webkit-transition: 0.2s background-color;
+    -moz-transition: 0.2s background-color;
+    -o-transition: 0.2s background-color;
+    -ms-transition: 0.2s background-color;
+    transition: 0.2s background-color;
+    cursor: pointer;
+    -webkit-flex-basis: 50%;
+    flex-basis: 50%;
+}
+.deal-controller .new i {
+    color: #3099f5;
+    font-size: 30px;
+    font-style: normal;
+}
+.deal-controller .new:hover {
+    background-color: rgba(48,153,245,0.1);
+}
+.deal-controller .amount .value {
+    font-size: 1.4em;
+}
+.deal-controller .profit {
+    vertical-align: bottom;
+    max-width: 102px;
+}
+.deal-controller .profit .value {
+    line-height: 40px;
+    height: 40px;
+    width: 100px;
+    display: block;
+    overflow: hidden;
+}
+.deal-controller .profit .value.money-big {
+    font-size: 24px;
+}
+.deal-controller .profit .value.money-medium {
+    font-size: 19px;
+}
+.deal-controller .profit .value.money-small {
+    font-size: 15px;
+}
+.deal-controller .profit .value.money-tiny {
+    font-size: 13px;
+}
+.deal-controller .strike-select {
+    width: 168px;
+}
+.deal-controller .strike-select .amount-input {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
+}
+.deal-controller .strike-select .amount-input .plus,
+.deal-controller .strike-select .amount-input .minus {
+    font-size: 6px;
+}
+.deal-controller .strike-select .amount-input .plus:before {
+    display: block;
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "\E95A";
+}
+.deal-controller .strike-select .amount-input .minus:before {
+    display: block;
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "\E959";
+}
+.deal-controller .strike-select .amount-input .input {
+    -webkit-box-flex: 2;
+    -moz-box-flex: 2;
+    -o-box-flex: 2;
+    -ms-box-flex: 2;
+    box-flex: 2;
+    -webkit-flex-grow: 2;
+    flex-grow: 2;
+    border: 1px solid #414a60;
+    font-size: 12px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    cursor: pointer;
+    text-align: center;
+    -webkit-transition: 0.3s background-color;
+    -moz-transition: 0.3s background-color;
+    -o-transition: 0.3s background-color;
+    -ms-transition: 0.3s background-color;
+    transition: 0.3s background-color;
+}
+.deal-controller .strike-select .amount-input .input:hover {
+    background-color: #2f3a52;
+    border: 1px solid #4b546a;
+    z-index: 3;
+}
+.deal-controller .strike-select .amount-input .input .value {
+    position: relative;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 20px;
+}
+.deal-controller .strike-select .amount-input .input .value.money-big {
+    font-size: 14px;
+}
+.deal-controller .strike-select .amount-input .input .value.money-medium {
+    font-size: 14px;
+}
+.deal-controller .strike-select .amount-input .input .value.money-small {
+    font-size: 14px;
+}
+.deal-controller .strike-select .amount-input .input .value.money-tiny {
+    font-size: 12px;
+}
+.deal-controller .timer {
+    width: auto;
+    vertical-align: bottom;
+    margin: 0;
+}
+.deal-controller .timer .value {
+    line-height: 40px;
+    height: 40px;
+    overflow: hidden;
+    font-size: 24px;
+}
