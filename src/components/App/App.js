@@ -1,4 +1,5 @@
 import React from 'react';
+import { NetStatusEvent, netStatusService } from '../../services/netStatusService.js';
 import {
   CryptoChart,
   enrichSeriesWithDefaultOptions,
@@ -27,6 +28,24 @@ class App extends React.Component {
     showDeal: false,
   };
   chartRef = React.createRef();
+
+  constructor(props) {
+    super(props);
+    netStatusService.on(NetStatusEvent.ONLINE, this.handleOnlineStatus);
+    netStatusService.on(NetStatusEvent.OFFLINE, this.handleOfflineStatus);
+  }
+
+  handleOnlineStatus = () => {
+    this.setState({
+      showDeal: true,
+    });
+  };
+
+  handleOfflineStatus = () => {
+    this.setState({
+      showDeal: false,
+    });
+  };
 
   componentDidMount() {
     binanceService
