@@ -56,6 +56,15 @@ class App extends React.Component {
           showDeal: true,
           initialData: data,
         });
+        // const chart = this.chartRef.current.chart;
+        // chart.update({
+        //   series: [
+        //     enrichSeriesWithDefaultOptions({ data }),
+        //     flagBuySeries,
+        //     flagSaleSeries,
+        //   ],
+        //   ...getChartOptionsToBeAddedWithData(),
+        // }, true, true, true);
         this.connectToStream();
       })
       .catch(() => {
