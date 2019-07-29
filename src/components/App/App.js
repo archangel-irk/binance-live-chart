@@ -3,11 +3,12 @@ import {
   CryptoChart,
   enrichSeriesWithDefaultOptions,
   getChartOptionsToBeAddedWithData,
-} from './Chart.js';
-import { Deal } from './Deal.js';
-import { binanceService } from './services/binance.service.js';
+} from '../Chart/Chart.js';
+import { OfflineNotificator } from '../OfflineNotificator/OfflineNotificator.js';
+import { Deal } from '../Deal/Deal.js';
+import { binanceService } from '../../services/binance.service.js';
 
-import logo from './logo.svg';
+import logo from '../../logo.svg';
 import './App.css';
 
 
@@ -83,7 +84,7 @@ class App extends React.Component {
           <div className="App-title">Reactive Crypto Bets</div>
         </header>
         <div className="App-main-wrapper">
-          <div className="App-sidebar-left"></div>
+          <div className="App-sidebar-left" />
           <div className="App-main">
             <CryptoChart
               title={pairTitleMap[this.currentSymbolPair]}
@@ -95,9 +96,10 @@ class App extends React.Component {
               onSale={this.handleSale}
             />
           </div>
-          <div className="App-sidebar-right"></div>
+          <div className="App-sidebar-right" />
         </div>
         <footer className="App-footer">© 2019 Reactive Crypto Bets. All rights reserved</footer>
+        <OfflineNotificator />
       </div>
     );
   }
