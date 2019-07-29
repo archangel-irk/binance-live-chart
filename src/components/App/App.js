@@ -24,6 +24,7 @@ class App extends React.Component {
   currentSymbolPair = PAIR_DEFAULT;
   state = {
     data: undefined,
+    showDeal: false,
   };
   chartRef = React.createRef();
 
@@ -32,7 +33,10 @@ class App extends React.Component {
       .getInitialData(this.currentSymbolPair)
       .then((data) => {
         // this.chartRef.current.chart.addSeries({ data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9] });
-        this.setState({ data });
+        this.setState({
+          showDeal: true,
+          data,
+        });
         this.connectToStream();
       })
       .catch(() => {
@@ -77,6 +81,7 @@ class App extends React.Component {
   };
 
   render() {
+    const { showDeal } = this.state;
     return (
       <div className="App">
         <header className="App-header">
@@ -91,10 +96,12 @@ class App extends React.Component {
               data={this.state.data}
               ref={this.chartRef}
             />
-            <Deal
-              onBuy={this.handleBuy}
-              onSale={this.handleSale}
-            />
+            {showDeal &&
+              <Deal
+                onBuy={this.handleBuy}
+                onSale={this.handleSale}
+              />
+            }
           </div>
           <div className="App-sidebar-right" />
         </div>
