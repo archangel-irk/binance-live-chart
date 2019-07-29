@@ -276,10 +276,6 @@ const flagSaleSeries = mergeDeepRight(flagDefaultSeries, {
 class CryptoChart extends React.Component {
   internalChart;
 
-  constructor(props) {
-    super(props);
-  }
-
   afterChartCreated = (chart) => {
     // console.log(chart);
     this.internalChart = chart;
