@@ -40,15 +40,15 @@ class NetStatusService extends EventEmitter {
     return !this.online;
   }
 
-  handleOnlineStatus() {
+  handleOnlineStatus = () => {
     this.online = true;
     this.trigger(NetStatusEvent.ONLINE);
-  }
+  };
 
-  handleOfflineStatus() {
+  handleOfflineStatus = () => {
     this.online = false;
     this.trigger(NetStatusEvent.OFFLINE);
-  }
+  };
 }
 
 const netStatusService = new NetStatusService();
