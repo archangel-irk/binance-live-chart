@@ -5,7 +5,7 @@ import {
   enrichSeriesWithDefaultOptions,
   getChartOptionsToBeAddedWithData,
 } from '../Chart/Chart.js';
-import { NetStatusNotificator } from '../NetStatusNotificator/NetStatusNotificator.js';
+import { NetStatusNotification } from '../NetStatusNotification/NetStatusNotification.js';
 import { Deal } from '../Deal/Deal.js';
 import { binanceService } from '../../services/binance.service.js';
 
@@ -56,9 +56,10 @@ class App extends React.Component {
           showDeal: true,
           initialData: data,
         });
-        this.connectToStream();
+        // this.connectToStream();
       })
       .catch(() => {
+        // binance api is unavailable
         // todo: handle errors
       });
   }
@@ -133,7 +134,7 @@ class App extends React.Component {
           <div className="App-sidebar-right" />
         </div>
         <footer className="App-footer">2019 Konstantin Melnikov</footer>
-        <NetStatusNotificator />
+        <NetStatusNotification />
       </div>
     );
   }

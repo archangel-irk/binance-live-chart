@@ -1,4 +1,4 @@
-.NetStatusNotificator {
+.NetStatusNotification {
     display: none;
     position: absolute;
     bottom: 25px;
@@ -7,14 +7,14 @@
     border-radius: 4px;
 }
 
-.NetStatusNotificator__show {
+.NetStatusNotification__show {
     display: block;
 }
 
-.NetStatusNotificator__online {
+.NetStatusNotification__online {
     background-color: #63af4b;
 }
 
-.NetStatusNotificator__offline {
+.NetStatusNotification__offline {
     background-color: #b31616;
 }

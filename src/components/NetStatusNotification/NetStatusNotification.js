@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './NetStatusNotificator.css';
+import './NetStatusNotification.css';
 import {
   NetStatusEvent,
   netStatusService,
@@ -20,7 +20,7 @@ const offlineTimeFormatter = new Intl.DateTimeFormat(undefined,{
   second: '2-digit',
 });
 
-class NetStatusNotificator extends React.Component {
+class NetStatusNotification extends React.Component {
   offlineFrom = undefined;
   offlineTimeIntervalId;
   onlineHideTimeoutId;
@@ -91,19 +91,19 @@ class NetStatusNotificator extends React.Component {
   }
 
   getBaseClass() {
-    return 'NetStatusNotificator';
+    return 'NetStatusNotification';
   }
 
   getStatusClass() {
     const { online } = this.state;
     return online
-      ? 'NetStatusNotificator__online'
-      : 'NetStatusNotificator__offline';
+      ? 'NetStatusNotification__online'
+      : 'NetStatusNotification__offline';
   }
 
   getShowClass() {
     const { show } = this.state;
-    return show ? 'NetStatusNotificator__show' : '';
+    return show ? 'NetStatusNotification__show' : '';
   }
 
   getClass() {
@@ -119,11 +119,11 @@ class NetStatusNotificator extends React.Component {
   }
 }
 
-NetStatusNotificator.defaultProps = {
+NetStatusNotification.defaultProps = {
   onlineText: 'Online',
   offlineText: 'Offline',
 };
 
 export {
-  NetStatusNotificator,
+  NetStatusNotification,
 };
