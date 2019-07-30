@@ -6,6 +6,7 @@
  * Email: banguiran@gmail.com
  */
 
+// https://github.com/RolandBanguiran/highstock-current-price-indicator
 // https://www.highcharts.com/products/plugin-registry/single/28/Current%20Price%20Indicator
 // https://github.com/highcharts/highcharts/issues/9915
 // https://www.highcharts.com/forum/viewtopic.php?t=37651
@@ -36,8 +37,8 @@ export function applyCurrentPriceIndicator(H) {
   });
 
   function renderCurrentPriceIndicator(chart) {
-    var priceYAxis = chart.yAxis[0],
-      priceSeries = chart.series[0];
+    const priceYAxis = chart.yAxis[0];
+    const priceSeries = chart.series[0];
 
     if (!priceSeries) {
       return;
@@ -45,15 +46,15 @@ export function applyCurrentPriceIndicator(H) {
 
     const grouped = priceSeries.groupedData && priceSeries.groupedData.length > 1;
 
-    var priceData = grouped ? priceSeries.groupedData : priceSeries.yData;
-    var currentPrice = priceData[priceData.length - 1];
+    const priceData = grouped ? priceSeries.groupedData : priceSeries.yData;
+    let currentPrice = priceData[priceData.length - 1];
     if (grouped) {
       currentPrice = currentPrice.y;
     }
 
-    var extremes = priceYAxis.getExtremes();
-    var min = extremes.min;
-    var max = extremes.max;
+    const extremes = priceYAxis.getExtremes();
+    const min = extremes.min;
+    const max = extremes.max;
 
     var options = chart.options.yAxis[0].currentPriceIndicator,
       defaultOptions = {
@@ -155,7 +156,6 @@ export function applyCurrentPriceIndicator(H) {
           ])
           .attr({
             stroke: options.lineColor,
-            'stroke-dasharray': dashStyleToArray(options.lineDashStyle, 1),
             'stroke-width': 1,
             opacity: options.lineOpacity,
             zIndex: 1,
@@ -232,42 +232,5 @@ export function applyCurrentPriceIndicator(H) {
         line: line,
       };
     }
-  }
-
-  /**
-   * Convert dash style name to array to be used a the value
-   * for SVG element's "stroke-dasharray" attribute
-   * @param {String} dashStyle  Possible values: 'Solid', 'Shortdot', 'Shortdash', etc
-   * @param {Integer} width  SVG element's "stroke-width"
-   * @param {Array} value
-   */
-  function dashStyleToArray(dashStyle, width) {
-    var value;
-
-    dashStyle = dashStyle.toLowerCase();
-    width = (typeof width !== 'undefined' && width !== 0) ? width : 1;
-
-    if (dashStyle === 'solid') {
-      value = 'none';
-    } else if (dashStyle) {
-      value = dashStyle
-        .replace('shortdashdotdot', '3,1,1,1,1,1,')
-        .replace('shortdashdot', '3,1,1,1')
-        .replace('shortdot', '1,1,')
-        .replace('shortdash', '3,1,')
-        .replace('longdash', '8,3,')
-        .replace(/dot/g, '1,3,')
-        .replace('dash', '4,3,')
-        .replace(/,$/, '')
-        .split(','); // ending comma
-
-      i = value.length;
-      while (i--) {
-        value[i] = parseInt(value[i]) * width;
-      }
-      value = value.join(',');
-    }
-
-    return value;
   }
 }
