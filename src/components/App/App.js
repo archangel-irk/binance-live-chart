@@ -2,8 +2,11 @@ import React from 'react';
 import { NetStatusEvent, netStatusService } from '../../services/netStatusService.js';
 import {
   CryptoChart,
-  enrichSeriesWithDefaultOptions,
-  getChartOptionsToBeAddedWithData,
+  enrichDataSeriesWithDefaultOptions,
+  flagBuySeries,
+  flagSaleSeries,
+  getCrosshairConfig,
+  getStartFinishLinesConfig,
 } from '../Chart/Chart.js';
 import { NetStatusNotification } from '../NetStatusNotification/NetStatusNotification.js';
 import { Deal } from '../Deal/Deal.js';
@@ -29,9 +32,9 @@ const TEXT_STREAM_RECONNECT = 'Reconnecting to Binance data stream';
 
 class App extends React.Component {
   currentSymbolPair = PAIR_DEFAULT;
+  bidStart;
   state = {
     initialized: false,
-    initialData: undefined,
     dealShow: false,
     notificationShow: false,
     notificationText: NOTIFICATION_TEXT_DEFAULT,
@@ -42,6 +45,10 @@ class App extends React.Component {
     super(props);
     netStatusService.on(NetStatusEvent.ONLINE, this.handleOnlineStatus);
     netStatusService.on(NetStatusEvent.OFFLINE, this.handleOfflineStatus);
+  }
+
+  componentDidMount() {
+    this.init();
   }
 
   showDeal() {
@@ -74,8 +81,60 @@ class App extends React.Component {
     this.hideDeal();
   };
 
-  componentDidMount() {
-    this.init();
+  setInitialData(data) {
+    const chart = this.chartRef.current.chart;
+    this.updateStartFinish();
+    chart.update({
+      series: [
+        enrichDataSeriesWithDefaultOptions({ data }),
+        flagBuySeries,
+        flagSaleSeries,
+      ],
+      ...getCrosshairConfig(),
+      // ...mergeDeepWith(mergeDeepRight,
+      //   getCrosshairConfig(),
+      //   getStartFinishLinesConfig(BID_START, BID_FINISH, SOFT_MAX),
+      // ),
+    }, true, true, true);
+  }
+
+  setIncrementalDataPoint(dataPoint) {
+    if (this.bidStart <= Date.now()) {
+      this.updateStartFinish();
+    }
+
+    const chart = this.chartRef.current.chart;
+    const series = chart.series[0];
+    series.addPoint(dataPoint, true, false, true);
+    // series.removePoint(0, true, true);
+    chart.series[1].update();
+    chart.series[2].update();
+  }
+
+  updateStartFinish() {
+    const MINUTE = 60000; // ms
+    const BID_START_IN = 0.7 * MINUTE;
+    const BID_START = Date.now() + BID_START_IN;
+    const BID_FINISH = BID_START + 0.5 * MINUTE; // bid frame
+    const SOFT_MAX = BID_FINISH + 0.4 * MINUTE; // padding after finish
+
+    const chart = this.chartRef.current.chart;
+    chart.update({
+      ...getStartFinishLinesConfig(BID_START, BID_FINISH, SOFT_MAX),
+    }, true, false, true);
+
+    // remove old data if needed
+    if (this.bidStart) {
+      const filterPredicate = (point) => point.x > this.bidStart - BID_START_IN;
+      const dataSeries = chart.series[0];
+      const flagBuySeries = chart.series[1];
+      const flagSaleSeries = chart.series[2];
+      dataSeries.setData(dataSeries.options.data.filter(filterPredicate));
+      flagBuySeries.setData(flagBuySeries.options.data.filter(filterPredicate));
+      flagSaleSeries.setData(flagSaleSeries.options.data.filter(filterPredicate));
+    }
+
+    this.bidStart = BID_START;
   }
 
   init() {
@@ -85,14 +144,15 @@ class App extends React.Component {
       .then((data) => {
         // this.chartRef.current.chart.addSeries({ data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9] });
         this.setState({ initialized: true });
-        this.setState({
-          initialData: data,
-        });
+        this.setInitialData(data);
         this.hideNotification();
         this.showDeal();
         this.connectToStream();
       })
-      .catch(() => {
+      .catch((error) => {
+        // there are all errors from `then`'s
+        // treat them as binance unavailable.
+
         this.setState({ initialized: false });
         this.setState({ notificationText: TEXT_API_UNAVAILABLE });
         this.showNotification();
@@ -116,15 +176,9 @@ class App extends React.Component {
     const chart = this.chartRef.current.chart;
     const series = chart.series[0];
     if (series) {
-      series.addPoint(dataPoint, true, false, true);
-      // series.removePoint(0, true, true);
-      chart.series[1].update();
-      chart.series[2].update();
+      this.setIncrementalDataPoint(dataPoint);
     } else {
-      chart.update({
-        series: [enrichSeriesWithDefaultOptions({data: [dataPoint]})],
-        ...getChartOptionsToBeAddedWithData(),
-      }, true, true, true);
+      this.setInitialData([dataPoint]);
     }
   };
 
@@ -201,7 +255,6 @@ class App extends React.Component {
           <div className="App-main">
             <CryptoChart
               title={pairTitleMap[this.currentSymbolPair]}
-              initialData={this.state.initialData}
               ref={this.chartRef}
             />
             {dealShow &&

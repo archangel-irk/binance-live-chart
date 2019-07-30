@@ -1,7 +1,6 @@
 import React from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-// import chartTheme from 'highcharts/themes/dark-unica.js';
 import { applyCurrentPriceIndicator } from './current-price-indicator.js';
 import { mergeDeepRight } from 'ramda';
 
@@ -103,29 +102,13 @@ const defaultOptions = {
   }],
 };
 
-export function getChartOptionsToBeAddedWithData(){
-  const BID_START = Date.now() + 1.5 * 60000; // + 1.5 minutes from now
-  const BID_FINISH = Date.now() + 2 * 60000; // + 2 minutes from now
+export function getStartFinishLinesConfig(bidStart, bidFinish, softMax) {
   return {
     xAxis: [{
-      softMax: Date.now() + 2.5 * 60000, // + 2.5 minutes from now
-      crosshair: {
-        color: '#2f4e6d',
-        snap: false,
-        label: {
-          enabled: true,
-          shape: 'rect',
-          backgroundColor: '#2f4e6d',
-          formatter: function(value) {
-            if (value) {
-              return Highcharts.dateFormat('%e.%m.%Y %H:%M:%S', new Date(value));
-            }
-          },
-        },
-      },
+      softMax,
       plotBands: [{
-        from: BID_START,
-        to: BID_FINISH,
+        from: bidStart,
+        to: bidFinish,
         color: {
           linearGradient: {
             x1: 0,
@@ -142,7 +125,7 @@ export function getChartOptionsToBeAddedWithData(){
       }],
       plotLines: [
         {
-          value: BID_START,
+          value: bidStart,
           width: 1,
           color: '#75756f',
           label: {
@@ -159,7 +142,7 @@ export function getChartOptionsToBeAddedWithData(){
           zIndex: 1,
         },
         {
-          value: BID_FINISH,
+          value: bidFinish,
           width: 1,
           color: '#a7a551',
           label: {
@@ -176,6 +159,27 @@ export function getChartOptionsToBeAddedWithData(){
           zIndex: 2,
         },
       ],
+    }],
+  };
+}
+
+export function getCrosshairConfig(){
+  return {
+    xAxis: [{
+      crosshair: {
+        color: '#2f4e6d',
+        snap: false,
+        label: {
+          enabled: true,
+          shape: 'rect',
+          backgroundColor: '#2f4e6d',
+          formatter: function(value) {
+            if (value) {
+              return Highcharts.dateFormat('%e.%m.%Y %H:%M:%S', new Date(value));
+            }
+          },
+        },
+      },
     }],
     yAxis: [{
       crosshair: {
@@ -197,7 +201,11 @@ export function getChartOptionsToBeAddedWithData(){
   };
 }
 
-const seriesDefaultOptions = {
+// export function getChartOptionsToBeAddedWithData() {
+//   return mergeDeepWith(mergeDeepRight, getCrosshairConfig(), getStartFinishLinesConfig());
+// }
+
+const dataSeriesDefaultOptions = {
   type: 'area',
   id: 'dataseries',
   lastPrice: {
@@ -234,8 +242,8 @@ const seriesDefaultOptions = {
   },
 };
 
-export function enrichSeriesWithDefaultOptions(series) {
-  return mergeDeepRight(seriesDefaultOptions, series);
+export function enrichDataSeriesWithDefaultOptions(series) {
+  return mergeDeepRight(dataSeriesDefaultOptions, series);
 }
 
 const flagDefaultSeries = {
@@ -255,7 +263,7 @@ const flagDefaultSeries = {
   width: 14,
 };
 
-const flagBuySeries = mergeDeepRight(flagDefaultSeries, {
+export const flagBuySeries = mergeDeepRight(flagDefaultSeries, {
   color: '#d5155b',
   fillColor: '#d5155b',
   // data: [{ x: Date.now() }],
@@ -264,7 +272,7 @@ const flagBuySeries = mergeDeepRight(flagDefaultSeries, {
   y: -25,
 });
 
-const flagSaleSeries = mergeDeepRight(flagDefaultSeries, {
+export const flagSaleSeries = mergeDeepRight(flagDefaultSeries, {
   color: '#62bd22',
   fillColor: '#62bd22',
   // data: [{ x: Date.now() - 1000 }],
@@ -293,27 +301,28 @@ class CryptoChart extends React.PureComponent {
       },
     });
 
-    if (this.props.initialData) {
-      // options.series = [
-      //   {
-      //     ...seriesDefaultOptions,
-      //     data: this.props.data,
-      //   }
-      // ];
-      // enable crosshair
-      // options = mergeDeepRight(options, axesWithCrosshair);
-      // // set softMax
-      // options.xAxis[0].softMax = Date.now() + 2 * 60000; // + 2.5 minutes
-
-      options = mergeDeepRight(options, {
-        series: [
-          enrichSeriesWithDefaultOptions({data: this.props.initialData}),
-          flagBuySeries,
-          flagSaleSeries,
-        ],
-        ...getChartOptionsToBeAddedWithData(),
-      });
-    }
+    // if (this.props.initialData) {
+    //   // options.series = [
+    //   //   {
+    //   //     ...dataSeriesDefaultOptions,
+    //   //     data: this.props.data,
+    //   //   }
+    //   // ];
+    //   // enable crosshair
+    //   // options = mergeDeepRight(options, axesWithCrosshair);
+    //   // // set softMax
+    //   // options.xAxis[0].softMax = Date.now() + 2 * 60000; // + 2.5 minutes
+    //
+    //   options = mergeDeepRight(options, {
+    //     series: [
+    //       enrichDataSeriesWithDefaultOptions({data: this.props.initialData}),
+    //       flagBuySeries,
+    //       flagSaleSeries,
+    //     ],
+    //     ...getChartOptionsToBeAddedWithData(),
+    //     // ...getStartFinishLinesConfig(),
+    //   });
+    // }
 
     const { forwardedRef } = this.props;
     return (
