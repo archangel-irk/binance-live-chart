@@ -7,14 +7,14 @@
     border-radius: 4px;
 }
 
-.NetStatusNotification__show {
+.NetStatusNotification--show {
     display: block;
 }
 
-.NetStatusNotification__online {
+.NetStatusNotification--online {
     background-color: #63af4b;
 }
 
-.NetStatusNotification__offline {
+.NetStatusNotification--offline {
     background-color: #b31616;
 }

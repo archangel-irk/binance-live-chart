@@ -97,13 +97,13 @@ class NetStatusNotification extends React.Component {
   getStatusClass() {
     const { online } = this.state;
     return online
-      ? 'NetStatusNotification__online'
-      : 'NetStatusNotification__offline';
+      ? 'NetStatusNotification--online'
+      : 'NetStatusNotification--offline';
   }
 
   getShowClass() {
     const { show } = this.state;
-    return show ? 'NetStatusNotification__show' : '';
+    return show ? 'NetStatusNotification--show' : '';
   }
 
   getClass() {
