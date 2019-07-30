@@ -1,3 +1,7 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b9006931-7ad4-46f3-a36b-ab5d2c2a42c4/deploy-status)](https://app.netlify.com/sites/sleepy-payne-838db5/deploys)
+
+[Demo](https://sleepy-payne-838db5.netlify.com/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
