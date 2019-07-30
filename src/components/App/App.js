@@ -11,6 +11,7 @@ import { binanceService } from '../../services/binance.service.js';
 
 import logo from '../../logo.svg';
 import './App.css';
+import { Notification } from '../Notification/Notification.js';
 
 
 const SymbolPair = {
@@ -21,11 +22,16 @@ const pairTitleMap = {
   [SymbolPair.BTCUSDT]: 'BTC/USDT',
 };
 
+const TEXT_API_UNAVAILABLE = 'Binance api is unavailable.';
+
 class App extends React.Component {
   currentSymbolPair = PAIR_DEFAULT;
   state = {
+    initialized: false,
     initialData: undefined,
-    showDeal: false,
+    dealShow: false,
+    notificationShow: false,
+    notificationText: '',
   };
   chartRef = React.createRef();
 
@@ -35,32 +41,57 @@ class App extends React.Component {
     netStatusService.on(NetStatusEvent.OFFLINE, this.handleOfflineStatus);
   }
 
+  showDeal() {
+    this.setState({ dealShow: true });
+  }
+
+  hideDeal() {
+    this.setState({ dealShow: false });
+  }
+
+  showNotification() {
+    this.setState({ notificationShow: true });
+  }
+
+  hideNotification() {
+    this.setState({ notificationShow: false });
+  }
+
   handleOnlineStatus = () => {
-    this.setState({
-      showDeal: true,
-    });
+    const { initialized } = this.state;
+    if (initialized) {
+      this.showDeal();
+    } else {
+      this.init();
+    }
   };
 
   handleOfflineStatus = () => {
-    this.setState({
-      showDeal: false,
-    });
+    this.hideDeal();
   };
 
   componentDidMount() {
+    this.init();
+  }
+
+  init() {
     binanceService
       .getInitialData(this.currentSymbolPair)
       .then((data) => {
         // this.chartRef.current.chart.addSeries({ data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9] });
+        this.setState({ initialized: true });
         this.setState({
-          showDeal: true,
           initialData: data,
         });
-        // this.connectToStream();
+        this.hideNotification();
+        this.showDeal();
+        this.connectToStream();
       })
       .catch(() => {
-        // binance api is unavailable
-        // todo: handle errors
+        this.setState({ initialized: false });
+        this.setState({ notificationText: TEXT_API_UNAVAILABLE });
+        this.showNotification();
+        this.hideDeal();
       });
   }
 
@@ -101,7 +132,10 @@ class App extends React.Component {
   };
 
   render() {
-    const { showDeal } = this.state;
+    const {
+      dealShow,
+      notificationShow,
+    } = this.state;
     return (
       <div className="App">
         <header className="App-header">
@@ -124,7 +158,7 @@ class App extends React.Component {
               initialData={this.state.initialData}
               ref={this.chartRef}
             />
-            {showDeal &&
+            {dealShow &&
               <Deal
                 onBuy={this.handleBuy}
                 onSale={this.handleSale}
@@ -135,6 +169,9 @@ class App extends React.Component {
         </div>
         <footer className="App-footer">2019 Konstantin Melnikov</footer>
         <NetStatusNotification />
+        {notificationShow &&
+          <Notification text={TEXT_API_UNAVAILABLE} />
+        }
       </div>
     );
   }

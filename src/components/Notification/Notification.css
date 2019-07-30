@@ -1,0 +1,9 @@
+.Notification {
+    display: block;
+    position: absolute;
+    align-self: center;
+    top: 50%;
+    padding: 8px 18px;
+    border-radius: 4px;
+    background-color: #d69d00;
+}
