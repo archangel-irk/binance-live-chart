@@ -1,6 +1,8 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/b9006931-7ad4-46f3-a36b-ab5d2c2a42c4/deploy-status)](https://app.netlify.com/sites/sleepy-payne-838db5/deploys)
 
-[Demo](https://sleepy-payne-838db5.netlify.com/)
+See [Demo](https://sleepy-payne-838db5.netlify.com/).
+
+[Binance API docs](https://github.com/binance-exchange/binance-official-api-docs).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
