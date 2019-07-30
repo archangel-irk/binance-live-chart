@@ -101,10 +101,6 @@ class App extends React.Component {
 
   connectToStream() {
     binanceService.connectToStream(this.currentSymbolPair);
-
-    // setTimeout(() => {
-    //   binanceService.trigger(BinanceServiceEvent.ERROR);
-    // }, 4000)
   }
 
   initStreamHandlers() {
