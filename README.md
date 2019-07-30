@@ -4,6 +4,17 @@ See [Demo](https://sleepy-payne-838db5.netlify.com/).
 
 [Binance API docs](https://github.com/binance-exchange/binance-official-api-docs).
 
+Features:
+
+- Download initial data;
+- Real-time data update through WebSocket;
+- Add Buy/Sale chart markers;
+- Current/last price indicator;
+- Handle offline/online events. Plus show notifications to user;
+- WebSocket reconnect after close. Plus show notifications to user;
+- Data shift (delete old data) after specific time.
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
