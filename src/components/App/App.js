@@ -91,10 +91,6 @@ class App extends React.Component {
         flagSaleSeries,
       ],
       ...getCrosshairConfig(),
-      // ...mergeDeepWith(mergeDeepRight,
-      //   getCrosshairConfig(),
-      //   getStartFinishLinesConfig(BID_START, BID_FINISH, SOFT_MAX),
-      // ),
     }, true, true, true);
   }
 
@@ -142,7 +138,6 @@ class App extends React.Component {
     binanceService
       .getInitialData(this.currentSymbolPair)
       .then((data) => {
-        // this.chartRef.current.chart.addSeries({ data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9] });
         this.setState({ initialized: true });
         this.setInitialData(data);
         this.hideNotification();
@@ -152,7 +147,6 @@ class App extends React.Component {
       .catch((error) => {
         // there are all errors from `then`'s
         // treat them as binance unavailable.
-
         this.setState({ initialized: false });
         this.setState({ notificationText: TEXT_API_UNAVAILABLE });
         this.showNotification();
