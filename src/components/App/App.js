@@ -105,7 +105,8 @@ class App extends React.Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <div className="App-title">Reactive Crypto Bets</div>
+          <div className="App-title">Binance live chart</div>
+          <a className="App-link">GitHub</a>
         </header>
         <div className="App-main-wrapper">
           <div className="App-sidebar-left" />
@@ -124,7 +125,7 @@ class App extends React.Component {
           </div>
           <div className="App-sidebar-right" />
         </div>
-        <footer className="App-footer">© 2019 Reactive Crypto Bets. All rights reserved</footer>
+        <footer className="App-footer">2019 Konstantin Melnikov</footer>
         <NetStatusNotificator />
       </div>
     );
