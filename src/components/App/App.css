@@ -32,7 +32,8 @@
   align-items: center;
   font-size: 14px;
   padding: 0 20px;
-  cursor: pointer;
+  color: white;
+  text-decoration: none;
 }
 
 .App-footer {
