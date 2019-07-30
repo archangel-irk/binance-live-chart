@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { EventEmitter } from '../utils/EventEmitter.js';
 
+// Binance api doc
+// https://github.com/binance-exchange/binance-official-api-docs
+
 // import io from 'socket.io-client';
 // https://socket.io/docs/client-api/#new-Manager-url-options
 // https://github.com/socketio/engine.io-client/blob/master/engine.io.js
