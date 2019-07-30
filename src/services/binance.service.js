@@ -75,10 +75,14 @@ const BinanceServiceEvent = {
   ERROR: 'error',
   CLOSE: 'close',
   RECONNECT: 'reconnect',
+  RECONNECTING: 'reconnecting',
 };
+
+const AUTO_RECONNECT_INTERVAL = 5 * 1000; // ms
 
 class BinanceService extends EventEmitter {
   connection;
+  url;
 
   getWsBase() {
     return `${WS_BASE}`;
@@ -105,7 +109,6 @@ class BinanceService extends EventEmitter {
   }
 
   connectToStream(symbol = SYMBOL_DEFAULT) {
-    console.log(this.getStreamMiniTickerUrl(symbol));
     // this.connection = io(this.getURLBase(), {
     //   path: '/stream',
     //   transports: ['websocket'],
@@ -124,23 +127,69 @@ class BinanceService extends EventEmitter {
     //   query: 'streams=!miniTicker@arr@3000ms'
     // });
 
-    const connection = new WebSocket(this.getStreamMiniTickerUrl(symbol));
-    connection.addEventListener(WebSocketEvent.OPEN, (event) => {
-      console.log('BINANCE CONNECTED');
-    });
+    this.url = this.getStreamMiniTickerUrl(symbol);
+    console.log(this.url);
+    this.open(this.url);
+  }
 
-    connection.addEventListener(WebSocketEvent.MESSAGE, (event) => {
-      const msg = JSON.parse(event.data);
-      this.trigger(BinanceServiceEvent.MESSAGE, this.streamMiniTickerMapper(msg.data));
-    });
+  open() {
+    this.connection = new WebSocket(this.url);
+    this.connection.addEventListener(WebSocketEvent.OPEN, this.handleStreamOpen);
+    this.connection.addEventListener(WebSocketEvent.MESSAGE, this.handleStreamMessage);
+    this.connection.addEventListener(WebSocketEvent.ERROR, this.handleStreamError);
+    this.connection.addEventListener(WebSocketEvent.CLOSE, this.handleStreamClose);
 
-    connection.addEventListener(WebSocketEvent.ERROR, (event) => {
-      this.trigger(BinanceServiceEvent.ERROR);
-    });
+    // test reconnection
+    // setTimeout(() => {this.connection.close()}, 5000);
+  }
 
-    connection.addEventListener(WebSocketEvent.CLOSE, (event) => {
-      this.trigger(BinanceServiceEvent.CLOSE);
-    });
+  removeAllWebSocketListeners() {
+    if (this.connection) {
+      this.connection.removeEventListener(WebSocketEvent.OPEN, this.handleStreamOpen);
+      this.connection.removeEventListener(WebSocketEvent.MESSAGE, this.handleStreamMessage);
+      this.connection.removeEventListener(WebSocketEvent.ERROR, this.handleStreamError);
+      this.connection.removeEventListener(WebSocketEvent.CLOSE, this.handleStreamClose);
+    }
+  }
+
+  handleStreamOpen = (event) => {
+    console.log('BinanceService: connected');
+  };
+
+  handleStreamMessage = (event) => {
+    const msg = JSON.parse(event.data);
+    this.trigger(BinanceServiceEvent.MESSAGE, this.streamMiniTickerMapper(msg.data));
+  };
+
+  handleStreamError = (event) => {
+    console.error('BinanceService: error', event);
+    this.trigger(BinanceServiceEvent.ERROR);
+    // todo: 'ECONNREFUSED' -> reconnect
+    // switch (e.code){
+    //   case 'ECONNREFUSED':
+    //     this.reconnect(e);
+    //     break;
+    //   default:
+    //     this.onerror(e);
+    //     break;
+    // }
+  };
+
+  handleStreamClose = (event) => {
+    console.log('BinanceService: closed', event);
+    this.trigger(BinanceServiceEvent.CLOSE);
+    this.reconnect();
+  };
+
+  reconnect() {
+    console.log(`BinanceService: retry in ${AUTO_RECONNECT_INTERVAL}ms`);
+    this.trigger(BinanceServiceEvent.RECONNECT);
+    this.removeAllWebSocketListeners();
+    setTimeout(() => {
+      console.log('BinanceService: reconnecting...');
+      this.trigger(BinanceServiceEvent.RECONNECTING);
+      this.open();
+    }, AUTO_RECONNECT_INTERVAL);
   }
 
   streamMiniTickerMapper(ticker) {

@@ -25,6 +25,7 @@ const pairTitleMap = {
 const NOTIFICATION_TEXT_DEFAULT = '';
 const TEXT_API_UNAVAILABLE = 'Binance api is unavailable.';
 const TEXT_STREAM_ERROR = 'Error in Binance data stream.';
+const TEXT_STREAM_RECONNECT = 'Reconnecting to Binance data stream';
 
 class App extends React.Component {
   currentSymbolPair = PAIR_DEFAULT;
@@ -106,11 +107,12 @@ class App extends React.Component {
   initStreamHandlers() {
     binanceService.on(BinanceServiceEvent.MESSAGE, this.handleStreamMessage);
     binanceService.on(BinanceServiceEvent.ERROR, this.handleStreamError);
+    binanceService.on(BinanceServiceEvent.RECONNECT, this.handleStreamReconnect);
   }
 
   handleStreamMessage = (dataPoint) => {
-    this.hideStreamErrorIfNeeded();
-    // console.log(data);
+    this.hideStreamErrorNotificationIfNeeded();
+    this.hideStreamReconnectNotificationIfNeeded();
     const chart = this.chartRef.current.chart;
     const series = chart.series[0];
     if (series) {
@@ -132,12 +134,29 @@ class App extends React.Component {
     this.hideDeal();
   };
 
-  hideStreamErrorIfNeeded() {
+  handleStreamReconnect = () => {
+    this.setState({ notificationText: TEXT_STREAM_RECONNECT });
+    this.showNotification();
+    this.hideDeal();
+  };
+
+  hideStreamErrorNotificationIfNeeded() {
     const {
       notificationShow,
       notificationText,
     } = this.state;
     if (notificationShow && notificationText === TEXT_STREAM_ERROR) {
+      this.hideNotification();
+      this.showDeal();
+    }
+  }
+
+  hideStreamReconnectNotificationIfNeeded() {
+    const {
+      notificationShow,
+      notificationText,
+    } = this.state;
+    if (notificationShow && notificationText === TEXT_STREAM_RECONNECT) {
       this.hideNotification();
       this.showDeal();
     }
@@ -197,7 +216,10 @@ class App extends React.Component {
         <footer className="App-footer">2019 Konstantin Melnikov</footer>
         <NetStatusNotification />
         {notificationShow &&
-          <Notification text={notificationText} />
+          <Notification
+            text={notificationText}
+            ellipsis={notificationText === TEXT_STREAM_RECONNECT}
+          />
         }
       </div>
     );
