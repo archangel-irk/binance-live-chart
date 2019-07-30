@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { EventEmitter } from '../utils/EventEmitter.js';
 
 // import io from 'socket.io-client';
 // https://socket.io/docs/client-api/#new-Manager-url-options
@@ -62,7 +63,21 @@ const apiMethod = {
   'systemStatus': { 'url': 'wapi/v3/systemStatus.html', 'method': 'GET', 'private': true },
 };
 
-class BinanceService {
+const WebSocketEvent = {
+  OPEN: 'open',
+  MESSAGE: 'message',
+  ERROR: 'error',
+  CLOSE: 'close',
+};
+
+const BinanceServiceEvent = {
+  MESSAGE: 'message',
+  ERROR: 'error',
+  CLOSE: 'close',
+  RECONNECT: 'reconnect',
+};
+
+class BinanceService extends EventEmitter {
   connection;
 
   getWsBase() {
@@ -89,7 +104,7 @@ class BinanceService {
     return `${apiMethod.aggTrades.url}?symbol=${symbol}&limit=50`;
   }
 
-  connectToStream(symbol = SYMBOL_DEFAULT, messageCallback = () => {}) {
+  connectToStream(symbol = SYMBOL_DEFAULT) {
     console.log(this.getStreamMiniTickerUrl(symbol));
     // this.connection = io(this.getURLBase(), {
     //   path: '/stream',
@@ -110,19 +125,21 @@ class BinanceService {
     // });
 
     const connection = new WebSocket(this.getStreamMiniTickerUrl(symbol));
-
-    connection.addEventListener('open', (event) => {
+    connection.addEventListener(WebSocketEvent.OPEN, (event) => {
       console.log('BINANCE CONNECTED');
     });
 
-    connection.addEventListener('message', (event) => {
-      // var f = document.getElementById("chatbox").contentDocument;
-      var text = "";
-      var msg = JSON.parse(event.data);
-      var time = new Date(msg.date);
-      var timeStr = time.toLocaleTimeString();
+    connection.addEventListener(WebSocketEvent.MESSAGE, (event) => {
+      const msg = JSON.parse(event.data);
+      this.trigger(BinanceServiceEvent.MESSAGE, this.streamMiniTickerMapper(msg.data));
+    });
 
-      messageCallback(this.streamMiniTickerMapper(msg.data));
+    connection.addEventListener(WebSocketEvent.ERROR, (event) => {
+      this.trigger(BinanceServiceEvent.ERROR);
+    });
+
+    connection.addEventListener(WebSocketEvent.CLOSE, (event) => {
+      this.trigger(BinanceServiceEvent.CLOSE);
     });
   }
 
@@ -199,7 +216,8 @@ class BinanceService {
     // theBigDay.setMinutes(theBigDay.getMinutes() - 1);
     // theBigDay.toISOString()
 
-    return axios.get(this.getApiAggTradesUrl(symbol))
+    return axios
+      .get(this.getApiAggTradesUrl(symbol))
       .then((response) => {
         // remove last candlestick cause it's close in the and of current minute.
         // response.data.pop();
@@ -207,12 +225,13 @@ class BinanceService {
         // response.data[response.data.length - 1][6] = Date.now();
 
         return this.handleApiAggTradesData(response.data);
-      })
-      .catch(function (error) {
-        // todo: handle error
-        console.log(error);
-      })
+      });
   }
 }
 
-export const binanceService = new BinanceService();
+const binanceService = new BinanceService();
+
+export {
+  BinanceServiceEvent,
+  binanceService,
+}

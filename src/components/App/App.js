@@ -7,7 +7,7 @@ import {
 } from '../Chart/Chart.js';
 import { NetStatusNotification } from '../NetStatusNotification/NetStatusNotification.js';
 import { Deal } from '../Deal/Deal.js';
-import { binanceService } from '../../services/binance.service.js';
+import { binanceService, BinanceServiceEvent } from '../../services/binance.service.js';
 
 import logo from '../../logo.svg';
 import './App.css';
@@ -22,7 +22,9 @@ const pairTitleMap = {
   [SymbolPair.BTCUSDT]: 'BTC/USDT',
 };
 
+const NOTIFICATION_TEXT_DEFAULT = '';
 const TEXT_API_UNAVAILABLE = 'Binance api is unavailable.';
+const TEXT_STREAM_ERROR = 'Error in Binance data stream.';
 
 class App extends React.Component {
   currentSymbolPair = PAIR_DEFAULT;
@@ -31,7 +33,7 @@ class App extends React.Component {
     initialData: undefined,
     dealShow: false,
     notificationShow: false,
-    notificationText: '',
+    notificationText: NOTIFICATION_TEXT_DEFAULT,
   };
   chartRef = React.createRef();
 
@@ -54,6 +56,7 @@ class App extends React.Component {
   }
 
   hideNotification() {
+    this.setState({ notificationText: NOTIFICATION_TEXT_DEFAULT });
     this.setState({ notificationShow: false });
   }
 
@@ -75,6 +78,7 @@ class App extends React.Component {
   }
 
   init() {
+    this.initStreamHandlers();
     binanceService
       .getInitialData(this.currentSymbolPair)
       .then((data) => {
@@ -96,11 +100,20 @@ class App extends React.Component {
   }
 
   connectToStream() {
-    binanceService
-      .connectToStream(this.currentSymbolPair, this.handleStreamMessage);
+    binanceService.connectToStream(this.currentSymbolPair);
+
+    // setTimeout(() => {
+    //   binanceService.trigger(BinanceServiceEvent.ERROR);
+    // }, 4000)
+  }
+
+  initStreamHandlers() {
+    binanceService.on(BinanceServiceEvent.MESSAGE, this.handleStreamMessage);
+    binanceService.on(BinanceServiceEvent.ERROR, this.handleStreamError);
   }
 
   handleStreamMessage = (dataPoint) => {
+    this.hideStreamErrorIfNeeded();
     // console.log(data);
     const chart = this.chartRef.current.chart;
     const series = chart.series[0];
@@ -116,6 +129,23 @@ class App extends React.Component {
       }, true, true, true);
     }
   };
+
+  handleStreamError = () => {
+    this.setState({ notificationText: TEXT_STREAM_ERROR });
+    this.showNotification();
+    this.hideDeal();
+  };
+
+  hideStreamErrorIfNeeded() {
+    const {
+      notificationShow,
+      notificationText,
+    } = this.state;
+    if (notificationShow && notificationText === TEXT_STREAM_ERROR) {
+      this.hideNotification();
+      this.showDeal();
+    }
+  }
 
   handleBuy = () => {
     const chart = this.chartRef.current.chart;
@@ -135,6 +165,7 @@ class App extends React.Component {
     const {
       dealShow,
       notificationShow,
+      notificationText,
     } = this.state;
     return (
       <div className="App">
@@ -170,7 +201,7 @@ class App extends React.Component {
         <footer className="App-footer">2019 Konstantin Melnikov</footer>
         <NetStatusNotification />
         {notificationShow &&
-          <Notification text={TEXT_API_UNAVAILABLE} />
+          <Notification text={notificationText} />
         }
       </div>
     );
