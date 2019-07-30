@@ -201,10 +201,6 @@ export function getCrosshairConfig(){
   };
 }
 
-// export function getChartOptionsToBeAddedWithData() {
-//   return mergeDeepWith(mergeDeepRight, getCrosshairConfig(), getStartFinishLinesConfig());
-// }
-
 const dataSeriesDefaultOptions = {
   type: 'area',
   id: 'dataseries',
@@ -285,14 +281,8 @@ class CryptoChart extends React.PureComponent {
   internalChart;
 
   afterChartCreated = (chart) => {
-    // console.log(chart);
     this.internalChart = chart;
   };
-
-  componentDidMount() {
-    // example of use
-    // this.internalChart.addSeries({ data: [1, 2, 1, 4, 3, 6, 7, 3, 8, 6, 9] });
-  }
 
   render() {
     let options = mergeDeepRight(defaultOptions, {
@@ -300,29 +290,6 @@ class CryptoChart extends React.PureComponent {
         text: this.props.title,
       },
     });
-
-    // if (this.props.initialData) {
-    //   // options.series = [
-    //   //   {
-    //   //     ...dataSeriesDefaultOptions,
-    //   //     data: this.props.data,
-    //   //   }
-    //   // ];
-    //   // enable crosshair
-    //   // options = mergeDeepRight(options, axesWithCrosshair);
-    //   // // set softMax
-    //   // options.xAxis[0].softMax = Date.now() + 2 * 60000; // + 2.5 minutes
-    //
-    //   options = mergeDeepRight(options, {
-    //     series: [
-    //       enrichDataSeriesWithDefaultOptions({data: this.props.initialData}),
-    //       flagBuySeries,
-    //       flagSaleSeries,
-    //     ],
-    //     ...getChartOptionsToBeAddedWithData(),
-    //     // ...getStartFinishLinesConfig(),
-    //   });
-    // }
 
     const { forwardedRef } = this.props;
     return (
