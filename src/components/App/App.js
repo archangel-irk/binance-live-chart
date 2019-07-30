@@ -106,7 +106,7 @@ class App extends React.Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <div className="App-title">Binance live chart</div>
-          <a className="App-link">GitHub</a>
+          <a className="App-link" href="https://github.com/archangel-irk/binance-live-chart">GitHub</a>
         </header>
         <div className="App-main-wrapper">
           <div className="App-sidebar-left" />
