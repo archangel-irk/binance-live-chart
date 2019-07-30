@@ -181,6 +181,7 @@ class BinanceService extends EventEmitter {
     this.reconnect();
   };
 
+  // https://github.com/websockets/ws/wiki/Websocket-client-implementation-for-auto-reconnect
   reconnect() {
     console.log(`BinanceService: retry in ${AUTO_RECONNECT_INTERVAL}ms`);
     this.trigger(BinanceServiceEvent.RECONNECT);
