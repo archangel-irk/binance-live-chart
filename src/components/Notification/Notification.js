@@ -12,10 +12,16 @@ class Notification extends React.PureComponent {
   }
 
   render() {
-    const { text } = this.props;
+    const {
+      text,
+      ellipsis,
+    } = this.props;
     return (
       <div className={this.getClass()}>
         {text}
+        {ellipsis &&
+          <span className="Notification__ellipsis" />
+        }
       </div>
     );
   }
