@@ -121,13 +121,18 @@ class App extends React.Component {
 
     // remove old data if needed
     if (this.bidStart) {
-      const filterPredicate = (point) => point.x > this.bidStart - BID_START_IN;
       const dataSeries = chart.series[0];
       const flagBuySeries = chart.series[1];
       const flagSaleSeries = chart.series[2];
-      dataSeries.setData(dataSeries.options.data.filter(filterPredicate));
-      flagBuySeries.setData(flagBuySeries.options.data.filter(filterPredicate));
-      flagSaleSeries.setData(flagSaleSeries.options.data.filter(filterPredicate));
+
+      const dataFilter = (point) => point.x > this.bidStart - BID_START_IN;
+      const newData = dataSeries.options.data.filter(dataFilter);
+      dataSeries.setData(newData);
+
+      // Filter against first point (to avoid flying markers).
+      const flagFilter = (point) => point.x > newData[0].x;
+      flagBuySeries.setData(flagBuySeries.options.data.filter(flagFilter));
+      flagSaleSeries.setData(flagSaleSeries.options.data.filter(flagFilter));
     }
 
     this.bidStart = BID_START;
