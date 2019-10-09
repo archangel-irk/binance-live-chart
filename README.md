@@ -1,4 +1,4 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/b9006931-7ad4-46f3-a36b-ab5d2c2a42c4/deploy-status)](https://app.netlify.com/sites/sleepy-payne-838db5/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b9006931-7ad4-46f3-a36b-ab5d2c2a42c4/deploy-status)](https://app.netlify.com/sites/binance-live-chart-example/deploys)
 
 See [Demo](https://binance-live-chart-example.netlify.com/).
 
