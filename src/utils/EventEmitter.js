@@ -76,6 +76,7 @@ const offApi = function(events, name, callback, options) {
     const remaining = [];
     for (let j = 0; j < handlers.length; j++) {
       const handler = handlers[j];
+      /* eslint-disable no-mixed-operators */
       if (
         callback && callback !== handler.callback &&
         callback !== handler.callback._callback ||
@@ -83,6 +84,7 @@ const offApi = function(events, name, callback, options) {
       ) {
         remaining.push(handler);
       }
+      /* eslint-enable no-mixed-operators */
     }
 
     // Replace events if there are any remaining.  Otherwise, clean up.
