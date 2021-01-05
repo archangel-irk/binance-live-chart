@@ -7,7 +7,7 @@
     "url": "https://github.com/archangel-irk/rest-api-client.git"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "highcharts": "^7.1.2",
     "highcharts-react-official": "^2.2.2",
     "http-proxy-middleware": "^0.19.1",
